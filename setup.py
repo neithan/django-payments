@@ -32,7 +32,6 @@ setup(
     include_package_data=True,
     classifiers=[
         "Environment :: Web Environment",
-        "Framework :: Django :: 2.2",
         "Framework :: Django :: 3.0",
         "Framework :: Django :: 3.1",
         "Framework :: Django :: 3.2",
@@ -50,7 +49,7 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     install_requires=[
-        "Django>=2.2",
+        "Django>=3.0",
         "requests>=1.2.0",
         "django-phonenumber-field[phonenumberslite]>=6.0.0",
     ],

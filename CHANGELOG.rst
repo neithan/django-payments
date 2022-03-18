@@ -4,6 +4,11 @@ Changelog
 This file contains a brief summary of new features and dependency changes or
 releases, in reverse chronological order.
 
+v2.0.0
+------
+
+- Dropped support for Django 2.2.
+
 v1.0.0
 ------
 
