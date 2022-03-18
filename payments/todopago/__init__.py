@@ -74,9 +74,9 @@ class TodoPagoProvider(BasicProvider):
                 gateway_message=authorization.status_message,
             )
 
-        payment.attrs.request_key = authorization.request_key
-        payment.attrs.public_request_key = authorization.public_request_key
-        payment.attrs.form_url = authorization.form_url
+        payment.extra_data.request_key = authorization.request_key
+        payment.extra_data.public_request_key = authorization.public_request_key
+        payment.extra_data.form_url = authorization.form_url
 
         payment.transaction_id = transaction_id
         payment.save()
@@ -84,8 +84,8 @@ class TodoPagoProvider(BasicProvider):
         return authorization
 
     def fetch_operation_status(self, payment: BasePayment) -> OperationStatus:
-        request_key = payment.attrs.request_key
-        answer_key = payment.attrs.answer_key
+        request_key = payment.extra_data.request_key
+        answer_key = payment.extra_data.answer_key
 
         status = self.client.get_operation_status(request_key, answer_key)
 
@@ -116,7 +116,7 @@ class TodoPagoProvider(BasicProvider):
             payment.change_status(PaymentStatus.ERROR)
             return redirect(payment.get_failure_url())
 
-        payment.attrs.answer_key = answer_key
+        payment.extra_data.answer_key = answer_key
         payment.save()
 
         self.fetch_operation_status(payment)
@@ -137,10 +137,10 @@ class TodoPagoProvider(BasicProvider):
             return self.process_callback(payment, request)
 
     def get_form(self, payment: BasePayment, data=None):
-        if "form_url" not in payment.attrs:
+        if "form_url" not in payment.extra_data:
             self.authorize_operation(payment)
 
-        url = payment.attrs.form_url
+        url = payment.extra_data.form_url
 
         raise RedirectNeeded(url)
 

@@ -152,7 +152,7 @@ class TestCybersourceProvider(TestCase):
     ):
         transaction_id = 1234
         xid = "abc"
-        self.payment.attrs.xid = xid
+        self.payment.extra_data.xid = xid
 
         response = MagicMock()
         response.requestID = transaction_id
@@ -187,7 +187,7 @@ class TestCybersourceProvider(TestCase):
         )
         transaction_id = 1234
         xid = "abc"
-        self.payment.attrs.xid = xid
+        self.payment.extra_data.xid = xid
 
         response = MagicMock()
         response.requestID = transaction_id
@@ -217,7 +217,7 @@ class TestCybersourceProvider(TestCase):
     def test_provider_redirects_on_failure(self, mocked_request, mocked_redirect):
         transaction_id = 1234
         xid = "abc"
-        self.payment.attrs.xid = xid
+        self.payment.extra_data.xid = xid
 
         response = MagicMock()
         response.requestID = transaction_id

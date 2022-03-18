@@ -166,11 +166,11 @@ class CyberSourceProvider(BasicProvider):
         else:
             params = self._prepare_preauth(payment, data)
         response = self._make_request(payment, params)
-        payment.attrs.capture = self._capture
+        payment.extra_data.capture = self._capture
         payment.transaction_id = response.requestID
         if response.reasonCode == AUTHENTICATE_REQUIRED:
             xid = response.payerAuthEnrollReply.xid
-            payment.attrs.xid = xid
+            payment.extra_data.xid = xid
             payment.change_status(
                 PaymentStatus.WAITING, message=_("3-D Secure verification in progress")
             )
@@ -279,7 +279,7 @@ class CyberSourceProvider(BasicProvider):
             "merchantReferenceCode": payment.id,
         }
         try:
-            fingerprint_id = payment.attrs.fingerprint_session_id
+            fingerprint_id = payment.extra_data.fingerprint_session_id
         except KeyError:
             pass
         else:
@@ -291,7 +291,7 @@ class CyberSourceProvider(BasicProvider):
 
     def _make_request(self, payment, params):
         response = self.client.service.runTransaction(**params)
-        payment.attrs.last_response = self._serialize_response(response)
+        payment.extra_data.last_response = self._serialize_response(response)
         return response
 
     def _prepare_payer_auth_validation_check(self, payment, card_data, pa_response):
@@ -300,7 +300,7 @@ class CyberSourceProvider(BasicProvider):
         check_service.signedPARes = pa_response
         params = self._get_params_for_new_payment(payment)
         params["payerAuthValidateService"] = check_service
-        if payment.attrs.capture:
+        if payment.extra_data.capture:
             service = self.client.factory.create("data:CCCreditService")
             service._run = "true"
             params["ccCreditService"] = service
@@ -445,7 +445,7 @@ class CyberSourceProvider(BasicProvider):
 
     def _prepare_merchant_defined_data(self, payment):
         try:
-            merchant_defined_data = payment.attrs.merchant_defined_data
+            merchant_defined_data = payment.extra_data.merchant_defined_data
         except KeyError:
             return
         else:
@@ -476,7 +476,7 @@ class CyberSourceProvider(BasicProvider):
 
     def process_data(self, payment, request):
         xid = request.POST.get("MD")
-        if xid != payment.attrs.xid:
+        if xid != payment.extra_data.xid:
             return redirect(payment.get_failure_url())
         if payment.status in [PaymentStatus.CONFIRMED, PaymentStatus.PREAUTH]:
             return redirect(payment.get_success_url())

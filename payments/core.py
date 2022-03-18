@@ -1,4 +1,5 @@
 import re
+from importlib import import_module
 from typing import TYPE_CHECKING
 from typing import Dict
 from typing import Optional
@@ -155,7 +156,7 @@ def _default_provider_factory(variant: str, payment: Optional["BasePayment"] = N
         raise ValueError("Payment variant does not exist: {}".format(variant))
     if variant not in PROVIDER_CACHE:
         module_path, class_name = handler.rsplit(".", 1)
-        module = __import__(str(module_path), globals(), locals(), [str(class_name)])
+        module = import_module(module_path)
         class_ = getattr(module, class_name)
         PROVIDER_CACHE[variant] = class_(**config)
     return PROVIDER_CACHE[variant]

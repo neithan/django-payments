@@ -8,6 +8,9 @@ v2.0.0
 ------
 
 - Dropped support for Django 2.2.
+- ``BasePayment.extra_data`` is now a JSONField and django will handle the
+  serialisation. Due to this, usage of the ``BasePayment.attrs`` proxy has been
+  deprecated. A migration needs to be generated to update this column in place.
 
 v1.0.0
 ------

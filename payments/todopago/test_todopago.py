@@ -85,13 +85,13 @@ def test_authorize_operation(tp_provider):
         tp_provider.authorize_operation(payment)
 
     assert payment.status == PaymentStatus.WAITING
-    assert payment.attrs.request_key == "f5ad41bc-92ba-40ff-889d-8a23fe562a28"
+    assert payment.extra_data.request_key == "f5ad41bc-92ba-40ff-889d-8a23fe562a28"
 
 
 def test_approved_payment_notification(rf, tp_provider):
     payment = Payment()
-    payment.attrs.request_key = "1fb7cc9a-14dd-42ec-bf1e-6d5820799642"
-    payment.attrs.form_url = (
+    payment.extra_data.request_key = "1fb7cc9a-14dd-42ec-bf1e-6d5820799642"
+    payment.extra_data.form_url = (
         "https://forms.todopago.com.ar/formulario/commands?command=formulario&amp;m=a6104bad3-1be7-4e8e-932e-e927100b2e86&amp;fr=1",
     )
     payment.save()
@@ -119,8 +119,8 @@ def test_approved_payment_notification(rf, tp_provider):
 
 def test_rejected_payment_notification(rf, tp_provider):
     payment = Payment()
-    payment.attrs.request_key = "1fb7cc9a-14dd-42ec-bf1e-6d5820799642"
-    payment.attrs.form_url = (
+    payment.extra_data.request_key = "1fb7cc9a-14dd-42ec-bf1e-6d5820799642"
+    payment.extra_data.form_url = (
         "https://forms.todopago.com.ar/formulario/commands?command=formulario&amp;m=a6104bad3-1be7-4e8e-932e-e927100b2e86&amp;fr=1",
     )
     payment.save()
